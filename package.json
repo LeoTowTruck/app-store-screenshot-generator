@@ -1,0 +1,13 @@
+{
+  "name": "promo-card-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "mkdir -p dist && cp -r index.html style.css app.js i18n.js dist/"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

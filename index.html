@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>App Store & Google Play Screenshot Maker | Fast Promo Mockup Generator for Developers</title>
+    <meta name="title" content="App Store & Google Play Screenshot Maker | Fast Promo Mockup Generator for Developers">
+    <meta name="description" content="Free online App Store and Google Play promo mockup & screenshot generator for app developers. Easily create high-resolution 1242x2688 store screenshots with iPhone frames, custom typography, drag-and-drop uploads, and Excel batch generation.">
+    <meta name="keywords" content="app store screenshot generator, google play screenshot maker, app promo mockup, iphone mockup generator, app screenshot creator, mobile app marketing, app store assets, batch screenshot generator, developer tools, ASO tools">
+    <meta name="author" content="App Promo Mockup Studio">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#0c0d0e">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="App Store Promo Mockup Generator">
+    <meta property="og:title" content="App Store & Google Play Screenshot Maker | Fast Promo Mockup Generator">
+    <meta property="og:description" content="Generate beautiful App Store and Google Play promotional screenshot mockups in seconds. Includes device frames, custom fonts, live preview, and batch export.">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="zh_TW">
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="App Store & Google Play Screenshot Maker | Fast Promo Mockup Generator">
+    <meta name="twitter:description" content="Free screenshot & promo card maker tailored for mobile app developers. Create stunning store screenshots with device frames and batch export.">
+
+    <!-- Structured Data (JSON-LD) for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "App Store & Google Play Promo Screenshot Maker",
+      "alternateName": "Promo Mockup Generator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A developer-friendly online tool for generating professional App Store and Google Play screenshot mockups with customizable titles, device frames, and Excel batch export support.",
+      "featureList": [
+        "Instant App Store (1242x2688) HD Screenshot Export",
+        "Interactive iPhone Mockup with Dynamic Island",
+        "Custom Font Families & Typography Stepper",
+        "Preset Color Palettes for Titles & Device Frames",
+        "Drag and Drop Screenshot & Background Upload",
+        "Excel / Tab-separated Batch Processing to ZIP",
+        "Multi-language (English / Traditional Chinese) Support"
+      ]
+    }
+    </script>
+
+    <!-- 引入 html2canvas 程式庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 引入 JSZip 程式庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- 引入 Google Fonts (含手寫、黑體、圓體、襯線體、藝術字體) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@700&family=Chakra+Petch:wght@700&family=Kiwi+Maru:wght@500;700&family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@500;700&family=Plus+Jakarta+Sans:wght@600;800&family=Yuji+Mai&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+
+    <!-- 獨立樣式表 CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 行動裝置頂部切換 Tab -->
+    <header class="mobile-header">
+        <div class="mobile-header-title">
+            🎨 <span data-i18n="app_title">宣傳圖生成器</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="lang-select-container">
+                <select id="lang-select-mobile" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language switch">
+                    <option value="en" selected>🇺🇸 English</option>
+                    <option value="zh-TW">🇹🇼 繁體中文</option>
+                </select>
+            </div>
+            <nav class="mobile-nav-tabs" aria-label="行動版導航">
+                <button class="mobile-tab-btn active" id="tab-btn-editor" onclick="switchMobileTab('editor')" data-i18n="tab_editor">
+                    ⚙️ 編輯設定
+                </button>
+                <button class="mobile-tab-btn" id="tab-btn-preview" onclick="switchMobileTab('preview')" data-i18n="tab_preview">
+                    📱 即時預覽
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="app-container">
+
+        <!-- 左側面板 (設定控制 + 批次處理) -->
+        <main class="control-panel active-tab-view" id="control-panel">
+            <div class="panel-header">
+                <h1 data-i18n="panel_title">🎨 宣傳圖產生器</h1>
+                <p data-i18n="panel_subtitle">自訂文案、字體、配色與手機邊框，支援即時預覽與批次產圖</p>
+            </div>
+
+            <!-- 頂部快捷動作 -->
+            <div class="panel-quick-actions">
+                <button class="quick-action-btn" onclick="expandAllAccordions(true)" data-i18n="expand_all">展開所有設定</button>
+                <button class="quick-action-btn" onclick="expandAllAccordions(false)" data-i18n="collapse_all">收合所有設定</button>
+            </div>
+
+            <!-- 1. 主標題設定 -->
+            <div class="accordion-item active" id="acc-title">
+                <div class="accordion-header" onclick="toggleAccordion('acc-title')">
+                    <span data-i18n="acc_title_head">✨ Main Title Settings</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label for="input-title" data-i18n="label_title_text">Title Text (Multi-line supported)</label>
+                        <input type="text" id="input-title" value="Promo Mockup Title" placeholder="Enter main title here..." data-i18n-placeholder="placeholder_title">
+                    </div>
+
+                    <!-- 樣式設定：包在 details 裡面可自由收合 (預設收合) -->
+                    <details class="form-accordion">
+                        <summary data-i18n="title_style_summary">主標題進階樣式設定</summary>
+                        <div class="accordion-details-content">
+                            
+                            <div class="form-group">
+                                <label data-i18n="label_font_size">字體大小</label>
+                                <div class="stepper-container">
+                                    <button class="stepper-btn" onclick="changeSize('title', -2)" aria-label="縮小字體">-</button>
+                                    <span class="stepper-value" id="title-size-val">36 px</span>
+                                    <button class="stepper-btn" onclick="changeSize('title', 2)" aria-label="放大字體">+</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label data-i18n="label_font_color">字體顏色</label>
+                                <div class="color-preset-group" id="title-colors">
+                                    <div class="color-btn selected" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="純白"></div>
+                                    <div class="color-btn" style="background-color: #1a1a1a;" data-color="#1a1a1a" title="質感深灰黑"></div>
+                                    <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="琥珀金"></div>
+                                    <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="奢華金"></div>
+                                    <div class="color-btn" style="background-color: #2563eb;" data-color="#2563eb" title="科技藍"></div>
+                                    <div class="color-btn" style="background-color: #06b6d4;" data-color="#06b6d4" title="青空藍"></div>
+                                    <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="翡翠綠"></div>
+                                    <div class="color-btn" style="background-color: #dc2626;" data-color="#dc2626" title="醒目紅"></div>
+                                    <div class="color-btn" style="background-color: #ec4899;" data-color="#ec4899" title="玫瑰粉"></div>
+                                    <div class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6" title="夢幻紫"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title-font" data-i18n="label_font_family">字體樣式</label>
+                                <select id="title-font">
+                                    <optgroup label="繁體中文標題" data-i18n-label="font_group_zh_title">
+                                        <option value="'Noto Sans TC', sans-serif">思源黑體 (現代俐落)</option>
+                                        <option value="'Noto Serif TC', serif">思源宋體 (經典質感)</option>
+                                        <option value="'ZCOOL KuaiLe', cursive">快樂體 (活潑手寫)</option>
+                                        <option value="'Ma Shan Zheng', cursive">馬善政毛筆體 (霸氣書法)</option>
+                                        <option value="'Kiwi Maru', serif">奇異果丸體 (日系可愛)</option>
+                                        <option value="'Microsoft JhengHei', sans-serif">微軟正黑體</option>
+                                    </optgroup>
+                                    <optgroup label="英文字體 (特別推薦主標題)" data-i18n-label="font_group_en_title">
+                                        <option value="'Plus Jakarta Sans', sans-serif">Jakarta (現代圓潤)</option>
+                                        <option value="'Bebas Neue', cursive">Bebas Neue (美式/電影大標)</option>
+                                        <option value="'Chakra Petch', sans-serif">Chakra Petch (賽博科技)</option>
+                                        <option value="'Caveat', cursive">Caveat (隨性手寫體)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                        </div>
+                    </details>
+                </div> 
+            </div>
+
+            <!-- 2. 說明文字設定 -->
+            <div class="accordion-item active" id="acc-subtitle">
+                <div class="accordion-header" onclick="toggleAccordion('acc-subtitle')">
+                    <span data-i18n="acc_subtitle_head">📝 Subtitle Settings</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label for="input-subtitle" data-i18n="label_subtitle_text">Subtitle Text (Line breaks supported)</label>
+                        <textarea id="input-subtitle" placeholder="Enter detailed subtitle here..." data-i18n-placeholder="placeholder_subtitle">Create stunning App Store & Google Play promo mockups in seconds.</textarea>
+                    </div>
+
+                    <details class="form-accordion">
+                        <summary data-i18n="subtitle_style_summary">說明文字進階樣式設定</summary>
+                        <div class="accordion-details-content">
+                            
+                            <div class="form-group">
+                                <label data-i18n="label_font_size">字體大小</label>
+                                <div class="stepper-container">
+                                    <button class="stepper-btn" onclick="changeSize('subtitle', -1)" aria-label="縮小說明文字">-</button>
+                                    <span class="stepper-value" id="subtitle-size-val">18 px</span>
+                                    <button class="stepper-btn" onclick="changeSize('subtitle', 1)" aria-label="放大說明文字">+</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label data-i18n="label_font_color">字體顏色</label>
+                                <div class="color-preset-group" id="subtitle-colors">
+                                    <div class="color-btn selected" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="純白"></div>
+                                    <div class="color-btn" style="background-color: #333333;" data-color="#333333" title="深灰"></div>
+                                    <div class="color-btn" style="background-color: #6b7280;" data-color="#6b7280" title="中性灰"></div>
+                                    <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="琥珀金"></div>
+                                    <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="奢華金"></div>
+                                    <div class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6" title="天空藍"></div>
+                                    <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="清新綠"></div>
+                                    <div class="color-btn" style="background-color: #ef4444;" data-color="#ef4444" title="活力紅"></div>
+                                    <div class="color-btn" style="background-color: #a855f7;" data-color="#a855f7" title="優雅紫"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subtitle-font" data-i18n="label_font_family">字體樣式</label>
+                                <select id="subtitle-font">
+                                    <optgroup label="中文內文" data-i18n-label="font_group_zh_sub">
+                                        <option value="'Noto Sans TC', sans-serif">思源黑體 (清晰易讀)</option>
+                                        <option value="'Noto Serif TC', serif">思源宋體 (文青質感)</option>
+                                        <option value="'Kiwi Maru', serif">奇異果丸體 (溫柔親和)</option>
+                                        <option value="'Microsoft JhengHei', sans-serif">微軟正黑體</option>
+                                    </optgroup>
+                                    <optgroup label="英文內文" data-i18n-label="font_group_en_sub">
+                                        <option value="'Plus Jakarta Sans', sans-serif">Jakarta Sans</option>
+                                        <option value="Arial, sans-serif">Arial Standard</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 3. 手機外框樣式設定 -->
+            <div class="accordion-item" id="acc-phone-style">
+                <div class="accordion-header" onclick="toggleAccordion('acc-phone-style')">
+                    <span data-i18n="acc_border_head">📱 手機外框邊框設定</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label data-i18n="label_border_color">邊框外光暈 / 邊框顏色選擇 (預設透明)</label>
+                        <div class="color-preset-group" id="phone-border-colors">
+                            <div class="color-btn transparent-btn selected" data-color="transparent" title="透明邊框 (預設)"></div>
+                            <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="奢華金"></div>
+                            <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="琥珀金"></div>
+                            <div class="color-btn" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="純白"></div>
+                            <div class="color-btn" style="background-color: #9ca3af;" data-color="#9ca3af" title="太空銀"></div>
+                            <div class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6" title="科技藍"></div>
+                            <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="薄荷綠"></div>
+                            <div class="color-btn" style="background-color: #ef4444;" data-color="#ef4444" title="熱情紅"></div>
+                            <div class="color-btn" style="background-color: #ec4899;" data-color="#ec4899" title="時尚粉"></div>
+                            <div class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6" title="深邃紫"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 圖片素材上傳與背景配色 -->
+            <div class="accordion-item" id="acc-images">
+                <div class="accordion-header" onclick="toggleAccordion('acc-images')">
+                    <span data-i18n="acc_images_head">🖼️ 背景與圖片素材</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label data-i18n="label_bg_presets">精選背景漸層與配色預設</label>
+                        <div class="color-preset-group" id="bg-presets">
+                            <div class="color-btn selected" style="background: linear-gradient(145deg, #4f46e5, #7c3aed, #ec4899);" data-bg="linear-gradient(145deg, #4f46e5 0%, #7c3aed 45%, #ec4899 100%)" title="霓光幻彩 Neon Sunset (預設)"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #0ea5e9, #6366f1, #a855f7);" data-bg="linear-gradient(145deg, #0ea5e9 0%, #6366f1 50%, #a855f7 100%)" title="賽博極光 Cyber Aurora"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #f97316, #ec4899, #8b5cf6);" data-bg="linear-gradient(145deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%)" title="暮光暖陽 Twilight Coral"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #059669, #0d9488, #0284c7);" data-bg="linear-gradient(145deg, #059669 0%, #0d9488 50%, #0284c7 100%)" title="清新薄荷 Emerald Breeze"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #1e3a8a, #3b82f6, #60a5fa);" data-bg="linear-gradient(145deg, #1e3a8a 0%, #3b82f6 60%, #60a5fa 100%)" title="皇家科技藍 Royal Blue"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #0f172a, #1e1b4b, #312e81);" data-bg="linear-gradient(145deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)" title="奢華暗夜 Midnight Obsidian"></div>
+                            <div class="color-btn" style="background-color: #fcf8ee; border: 1px solid #666;" data-bg="#fcf8ee" title="經典極簡米白 Light Cream"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="label_bg_image">自訂背景圖片 (支援點擊選擇或拖曳至預覽背景)</label>
+                        <div class="file-upload-box" id="bg-upload-box">
+                            <span class="file-upload-text" id="bg-file-name" data-i18n="bg_upload_text">📁 點擊或拖曳背景圖片...</span>
+                            <input type="file" id="upload-bg" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="label_screen_image">手機畫面截圖 (支援點擊或拖曳至手機螢幕)</label>
+                        <div class="file-upload-box" id="screen-upload-box">
+                            <span class="file-upload-text" id="screen-file-name" data-i18n="screen_upload_text">📱 點擊或拖曳手機截圖...</span>
+                            <input type="file" id="upload-screen" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 匯出單張圖片按鈕 -->
+            <button class="btn-capture" id="btn-export-single" onclick="downloadPromoCard()" data-i18n="btn_export_single">
+                📸 匯出高畫質宣傳圖 (1242 × 2688)
+            </button>
+
+            <!-- 6. Excel 批次處理區塊 -->
+            <div class="accordion-item" id="acc-batch">
+                <div class="accordion-header" onclick="toggleAccordion('acc-batch')">
+                    <span data-i18n="acc_batch_head">📋 Excel 批次貼上與資料夾生成</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <!-- 格式提示說明 -->
+                    <div class="format-tip-box">
+                        <div class="tip-header">
+                            <div class="tip-header-title">
+                                <span data-i18n="tip_box_title">💡 Excel 貼上格式說明</span>
+                            </div>
+                            <div class="tip-actions-prominent">
+                                <!-- 🔴 YouTube 影片教學按鈕 -->
+                                <a href="https://www.youtube.com" 
+                                   id="btn-yt-tutorial"
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="btn-yt-tutorial"
+                                   title="點擊在新分頁觀看 YouTube 影片教學">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                    <span data-i18n="btn_yt_tutorial">▶ 觀看 YouTube 影片教學</span>
+                                </a>
+
+                                <!-- 📊 開啟範本按鈕 -->
+                                <a href="https://docs.google.com/spreadsheets/d/1X0KojyP4MkygzHuh9i-8H-OPWvD7iFcldSWp3UXsk80/edit?gid=999578730#gid=999578730" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="btn-action-lg">
+                                    <span data-i18n="btn_view_sheet">📊 看Google試算表範本</span>
+                                </a>
+
+                                <!-- 📥 下載範本按鈕 -->
+                                <a href="https://docs.google.com/spreadsheets/d/1X0KojyP4MkygzHuh9i-8H-OPWvD7iFcldSWp3UXsk80/export?format=xlsx"
+                                   class="btn-action-lg"
+                                   download="宣傳圖文字範本.xlsx"
+                                   title="直接下載 Excel 格式範本檔案">
+                                    <span data-i18n="btn_download_excel">📥 下載 Excel 範本</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="folder-input" data-i18n="label_step1_folder">1. 選擇截圖檔案所在資料夾</label>
+                        <input type="file" id="folder-input" webkitdirectory directory multiple class="folder-select-input">
+                        <p style="font-size: 10px; color: var(--text-muted); margin-top: 4px;" data-i18n="tip_step1_folder">* 選擇包含 a1, a2... 等圖片的電腦資料夾</p>
+                    </div>
+
+                    <!-- 表單欄位 -->
+                    <div class="form-group">
+                        <label for="excel-paste-area" data-i18n="label_step2_paste">2. 貼上 Excel 複製內容 (Tab 分隔)</label>
+                        <textarea id="excel-paste-area" rows="6" placeholder="點擊此處並貼上 (Ctrl+V / Cmd+V) Excel 資料...&#10;&#10;例：&#10;1.png	Precise Location	Quickly plan...	a1&#10;2.png	Global Driver Tracking	View nearby...	a2" data-i18n-placeholder="placeholder_excel_paste"></textarea>
+                    </div>
+
+                    <button type="button" class="btn-capture btn-secondary" onclick="processBatch()" data-i18n="btn_batch_process">
+                        ⚡ 一鍵批次生成並下載 ZIP
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 右側即時預覽區 (包含縮放適應與工具列) -->
+        <section class="preview-wrapper" id="preview-wrapper">
+            <!-- 預覽上方工具列 -->
+            <div class="preview-toolbar">
+                <div class="preview-toolbar-left">
+                    <span class="preview-title-badge" data-i18n="preview_title">📱 即時畫布預覽</span>
+                    <span class="preview-size-tag">414 × 896 px</span>
+                </div>
+                <div class="preview-toolbar-right">
+                    <button class="zoom-btn active" id="btn-zoom-fit" onclick="setZoomMode('fit')" title="自動符合視窗大小" data-i18n="zoom_fit">
+                        📐 適應
+                    </button>
+                    <button class="zoom-btn zoom-btn-sub" id="btn-zoom-50" onclick="setZoomScale(0.5)">50%</button>
+                    <button class="zoom-btn zoom-btn-sub" id="btn-zoom-75" onclick="setZoomScale(0.75)">75%</button>
+                    <button class="zoom-btn zoom-btn-sub" id="btn-zoom-100" onclick="setZoomScale(1.0)">100%</button>
+                    <button class="btn-toolbar-download" onclick="downloadPromoCard()" title="下載宣傳圖" data-i18n="toolbar_download">
+                        💾 下載
+                    </button>
+                    <!-- 🌐 最右上角語言切換選單 (Desktop) -->
+                    <div class="lang-select-container lang-select-desktop-container">
+                        <select id="lang-select-desktop" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language switch">
+                            <option value="en" selected>🇺🇸 English</option>
+                            <option value="zh-TW">🇹🇼 繁體中文</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 預覽畫布可滾動舞台 -->
+            <div class="preview-stage" id="preview-stage">
+                <div class="promo-card-scaler" id="promo-card-scaler">
+                    <div id="promo-card">
+                        <div class="text-container" id="text-container">
+                            <h1 class="main-title" id="display-title" contenteditable="true" spellcheck="false" title="Click to edit title directly">Promo Mockup Title</h1>
+                            <p class="subtitle" id="display-subtitle" contenteditable="true" spellcheck="false" title="Click to edit subtitle directly">Create stunning App Store & Google Play promo mockups in seconds.</p>
+                        </div>
+                        <div class="phone-mockup" id="phone-mockup" title="點擊更換手機截圖，或直接拖曳圖片至此">
+                            <div class="island"></div>
+                            <div class="screen-container" id="screen-box">
+                                <span class="placeholder-text" id="placeholder" data-i18n="canvas_placeholder">點擊上傳或拖曳截圖至此</span>
+                                <img id="display-screen" src="" alt="手機螢幕畫面" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 浮動提示標籤 -->
+                <div class="preview-hint-badge" data-i18n="preview_hint">
+                    💡 提示：點擊卡片背景或手機螢幕可快速更換圖片
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 多國語言字典與核心應用程式 JS -->
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

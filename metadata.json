@@ -1,0 +1,8 @@
+{
+  "name": "Promo Card Generator",
+  "description": "App Store and Google Play screenshot mockup generator tailored for mobile app developers with 1242x2688 HD export, custom typography, and Excel batch processing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
