@@ -1107,11 +1107,17 @@ function fallbackCopyText(text) {
 // ==========================================
 // 11. 多國語言字典與處理 (i18n Localization handled via i18n.js)
 // ==========================================
+const SUPPORTED_LANGUAGES = [
+    'zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'fr', 'de', 'es', 'it', 'nl',
+    'sv', 'da', 'fi', 'pl', 'hu', 'tr', 'ms', 'th', 'vi', 'id', 'tl',
+    'pt-BR', 'hi', 'ar'
+];
+
 function detectUserLanguage() {
     // 1. 若使用者曾手動切換過語言並記錄於 localStorage，優先採用
     try {
         const savedLang = localStorage.getItem('app_promo_lang');
-        if (savedLang && i18n[savedLang]) {
+        if (savedLang && SUPPORTED_LANGUAGES.includes(savedLang)) {
             return savedLang;
         }
     } catch (e) {
@@ -1127,34 +1133,35 @@ function detectUserLanguage() {
         if (!rawLang || typeof rawLang !== 'string') continue;
         const normalized = rawLang.trim().toLowerCase();
 
-        // 精準完全比對 (例如 'zh-TW', 'en')
-        for (const key of Object.keys(i18n)) {
+        // 精準完全比對 (例如 'zh-tw' -> 'zh-TW', 'pt-br' -> 'pt-BR', 'en' -> 'en')
+        for (const key of SUPPORTED_LANGUAGES) {
             if (key.toLowerCase() === normalized) {
                 return key;
             }
         }
 
-        // 中文系語言標籤處理
+        // 中文系語言標籤處理 (zh, zh-TW, zh-HK, zh-MO, zh-CN, zh-SG, zh-Hant, zh-Hans)
         if (normalized.startsWith('zh')) {
-            // 如果明確是簡體特徵，且你有支援 zh-CN
-            if ((normalized.includes('cn') || normalized.includes('hans') || normalized.includes('sg')) && i18n['zh-CN']) {
+            if (normalized.includes('cn') || normalized.includes('hans') || normalized.includes('sg')) {
                 return 'zh-CN';
             }
-            // 其他情況（或繁體相關、通用 zh）優先對應 zh-TW
-            if (i18n['zh-TW']) {
-                return 'zh-TW';
-            }
+            return 'zh-TW';
         }
 
-        // 英文系語言標籤處理 (en, en-US, en-GB, en-AU 等)
+        // 葡萄牙語系
+        if (normalized.startsWith('pt')) {
+            return 'pt-BR';
+        }
+
+        // 英文系
         if (normalized.startsWith('en')) {
-            if (i18n['en']) return 'en';
+            return 'en';
         }
 
         // 前綴比對 (例如 'ja-JP' 找 'ja')
         const primaryCode = normalized.split('-')[0];
-        for (const key of Object.keys(i18n)) {
-            if (key.toLowerCase() === primaryCode || key.toLowerCase().startsWith(primaryCode)) {
+        for (const key of SUPPORTED_LANGUAGES) {
+            if (key.toLowerCase() === primaryCode) {
                 return key;
             }
         }
@@ -1167,7 +1174,8 @@ function detectUserLanguage() {
 let currentLang = detectUserLanguage();
 
 function t(key, params = {}) {
-    let str = (i18n[currentLang] && i18n[currentLang][key]) || (i18n['en'] && i18n['en'][key]) || key;
+    const dict = window.i18n || {};
+    let str = (dict[currentLang] && dict[currentLang][key]) || (dict['en'] && dict['en'][key]) || key;
     for (let p in params) {
         str = str.replace(new RegExp(`\\{${p}\\}`, 'g'), params[p]);
     }
@@ -1175,10 +1183,13 @@ function t(key, params = {}) {
 }
 
 async function changeLanguage(lang) {
-    if (!i18n[lang] && typeof loadLocale === 'function') {
+    if (!window.i18n?.[lang] && typeof loadLocale === 'function') {
         await loadLocale(lang);
     }
-    if (!i18n[lang]) {
+    if (!window.i18n?.['en'] && typeof loadLocale === 'function' && lang !== 'en') {
+        loadLocale('en');
+    }
+    if (!window.i18n?.[lang]) {
         console.warn(`Language ${lang} not found, keeping current.`);
         return;
     }
@@ -1186,11 +1197,11 @@ async function changeLanguage(lang) {
     // 檢查是否需同步更新預設文案
     const oldLang = currentLang;
     const isDefaultTitle = !inputTitle.value || 
-                          inputTitle.value === i18n[oldLang]?.default_title || 
+                          window.i18n[oldLang]?.default_title === inputTitle.value || 
                           inputTitle.value === "主標題設定" || 
                           inputTitle.value === "Promo Mockup Title";
     const isDefaultSubtitle = !inputSubtitle.value || 
-                             inputSubtitle.value === i18n[oldLang]?.default_subtitle || 
+                             window.i18n[oldLang]?.default_subtitle === inputSubtitle.value || 
                              inputSubtitle.value === "說明文字設定" || 
                              inputSubtitle.value === "Create stunning App Store & Google Play promo mockups in seconds.";
 
@@ -1206,49 +1217,49 @@ async function changeLanguage(lang) {
     // 替換所有具有 data-i18n 的元素文字
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (key && i18n[currentLang] && i18n[currentLang][key]) {
-            el.innerText = i18n[currentLang][key];
+        if (key && window.i18n[currentLang] && window.i18n[currentLang][key]) {
+            el.innerText = window.i18n[currentLang][key];
         }
     });
 
     // 替換 placeholder
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (key && i18n[currentLang] && i18n[currentLang][key]) {
-            el.setAttribute('placeholder', i18n[currentLang][key]);
+        if (key && window.i18n[currentLang] && window.i18n[currentLang][key]) {
+            el.setAttribute('placeholder', window.i18n[currentLang][key]);
         }
     });
 
     // 替換 optgroup label
     document.querySelectorAll('[data-i18n-label]').forEach(el => {
         const key = el.getAttribute('data-i18n-label');
-        if (key && i18n[currentLang] && i18n[currentLang][key]) {
-            el.setAttribute('label', i18n[currentLang][key]);
+        if (key && window.i18n[currentLang] && window.i18n[currentLang][key]) {
+            el.setAttribute('label', window.i18n[currentLang][key]);
         }
     });
 
     // 若使用者未自訂文案，同步切換範例文案與畫布
-    if (isDefaultTitle && i18n[currentLang].default_title) {
-        inputTitle.value = i18n[currentLang].default_title;
-        displayTitle.innerText = i18n[currentLang].default_title;
+    if (isDefaultTitle && window.i18n[currentLang]?.default_title) {
+        inputTitle.value = window.i18n[currentLang].default_title;
+        displayTitle.innerText = window.i18n[currentLang].default_title;
     }
-    if (isDefaultSubtitle && i18n[currentLang].default_subtitle) {
-        inputSubtitle.value = i18n[currentLang].default_subtitle;
-        displaySubtitle.innerText = i18n[currentLang].default_subtitle;
+    if (isDefaultSubtitle && window.i18n[currentLang]?.default_subtitle) {
+        inputSubtitle.value = window.i18n[currentLang].default_subtitle;
+        displaySubtitle.innerText = window.i18n[currentLang].default_subtitle;
     }
 
     // 更新網頁標題與 SEO Meta 標籤
     document.title = t('page_title');
     document.documentElement.lang = currentLang;
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc && i18n[currentLang].meta_desc) {
-        metaDesc.setAttribute('content', i18n[currentLang].meta_desc);
+    if (metaDesc && window.i18n[currentLang]?.meta_desc) {
+        metaDesc.setAttribute('content', window.i18n[currentLang].meta_desc);
     }
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.setAttribute('content', t('page_title'));
     const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc && i18n[currentLang].meta_desc) {
-        ogDesc.setAttribute('content', i18n[currentLang].meta_desc);
+    if (ogDesc && window.i18n[currentLang]?.meta_desc) {
+        ogDesc.setAttribute('content', window.i18n[currentLang].meta_desc);
     }
 
     // 更新試算表欄位標籤與資料列
@@ -1257,7 +1268,7 @@ async function changeLanguage(lang) {
 
 // 頁面初始化執行自適應縮放、試算表初始化與語系載入
 window.addEventListener('DOMContentLoaded', async () => {
-    changeLanguage(currentLang);
+    await changeLanguage(currentLang);
     renderAllSpreadsheets();
     setTimeout(updateAutoFitScale, 100);
 
