@@ -1314,7 +1314,7 @@ textarea {
     flex-shrink: 0;
     transition: outline 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 0px;
 }
 
 /* 背景拖曳高亮提示 */
