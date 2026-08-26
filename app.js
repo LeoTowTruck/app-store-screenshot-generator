@@ -404,64 +404,26 @@ async function capturePromoCardCanvas() {
     }
 }
 
-// 批量專用：在背景建立 1:1 的 Off-screen 隱藏卡片進行截圖，完全不干擾前台畫面與縮放
-async function captureOffscreenPromoCard(title, subtitle, screenImgSrc) {
+// 批量專用：直接在畫面上更新並擷取，確保字型、圖片、CSS 樣式 100% 與單張一致
+async function capturePromoCardCanvasBatch() {
+    const scaler = document.getElementById('promo-card-scaler');
     const promoCardEl = document.getElementById('promo-card');
     if (!promoCardEl) throw new Error("Promo card element not found");
 
-    // 複製現有卡片的所有樣式與架構
-    const clone = promoCardEl.cloneNode(true);
-    clone.id = 'offscreen-promo-card-clone';
-    
-    // 設定到背景看不到的區域，並固定為標準 414x896 尺寸
-    clone.style.position = 'fixed';
-    clone.style.left = '-99999px';
-    clone.style.top = '0';
-    clone.style.zIndex = '-99999';
-    clone.style.transform = 'none';
-    clone.style.transition = 'none';
-    clone.style.width = '414px';
-    clone.style.height = '896px';
-    clone.style.visibility = 'visible';
-    clone.style.display = 'flex';
+    // 強制重算 layout
+    void promoCardEl.offsetHeight;
 
-    // 替換克隆卡片上的文字與截圖 (注意對應 index.html 中的真實 id: display-title, display-subtitle, display-screen, placeholder)
-    const cloneTitle = clone.querySelector('#display-title');
-    const cloneSubtitle = clone.querySelector('#display-subtitle');
-    const cloneScreenImg = clone.querySelector('#display-screen');
-    const clonePlaceholder = clone.querySelector('#placeholder');
+    // 等待 200 毫秒確保圖片與文字渲染完成
+    await new Promise(resolve => setTimeout(resolve, 200));
 
-    if (cloneTitle && title !== undefined) cloneTitle.innerText = title;
-    if (cloneSubtitle && subtitle !== undefined) cloneSubtitle.innerText = subtitle;
-    if (cloneScreenImg && screenImgSrc) {
-        cloneScreenImg.src = screenImgSrc;
-        cloneScreenImg.style.display = 'block';
-        if (clonePlaceholder) clonePlaceholder.style.display = 'none';
-    }
+    const canvas = await html2canvas(promoCardEl, {
+        scale: 3, // 414x896 放大 3 倍輸出為標準 1242x2688
+        useCORS: true,
+        backgroundColor: null,
+        logging: false
+    });
 
-    document.body.appendChild(clone);
-
-    try {
-        // 強制重算 layout
-        void clone.offsetHeight;
-
-        // 等待 200 毫秒確保瀏覽器與圖片完整渲染
-        await new Promise(r => setTimeout(r, 200));
-
-        const canvas = await html2canvas(clone, {
-            scale: 3, // 414x896 放大 3 倍輸出為標準 1242x2688
-            useCORS: true,
-            backgroundColor: null,
-            logging: false
-        });
-
-        return canvas;
-    } finally {
-        // 截圖完畢後清除背景隱藏元素
-        if (clone && clone.parentNode) {
-            clone.parentNode.removeChild(clone);
-        }
-    }
+    return canvas;
 }
 
 async function downloadPromoCard() {
@@ -888,10 +850,20 @@ async function processBatch() {
         btnBatch.style.opacity = '0.7';
     }
 
+    const scaler = document.getElementById('promo-card-scaler');
+    const originalTransform = scaler ? scaler.style.transform : '';
+    const originalTransition = scaler ? scaler.style.transition : '';
+
     const zip = new JSZip();
     let generatedCount = 0;
 
     try {
+        // 批次開始前：將縮放平順解除至 1:1 原生解析度 (414x896)，停用過渡動畫避免干擾
+        if (scaler) {
+            scaler.style.transition = 'none';
+            scaler.style.transform = 'none';
+        }
+
         for (let i = 0; i < validRows.length; i++) {
             const row = validRows[i];
             const lang = row[0] ? String(row[0]).trim() : '';
@@ -904,17 +876,16 @@ async function processBatch() {
             }
 
             // 更新文字與預覽
-            if (title) {
+            if (title !== undefined) {
                 inputTitle.value = title;
                 displayTitle.innerText = title;
             }
-            if (subtitle) {
+            if (subtitle !== undefined) {
                 inputSubtitle.value = subtitle;
                 displaySubtitle.innerText = subtitle;
             }
 
             // 搜尋匹配檔案
-            let fileDataUrl = '';
             if (imgPath) {
                 const fileNameOnly = imgPath.split('/').pop().split('\\').pop();
                 let targetFile = imageFilesMap[fileNameOnly] || 
@@ -923,23 +894,12 @@ async function processBatch() {
                                 imageFilesMap[fileNameOnly + '.jpeg'];
 
                 if (targetFile) {
-                    fileDataUrl = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.onerror = () => resolve('');
-                        reader.readAsDataURL(targetFile);
-                    });
-                    if (fileDataUrl) {
-                        displayScreen.src = fileDataUrl;
-                        displayScreen.style.display = 'block';
-                        if (placeholder) placeholder.style.display = 'none';
-                    }
+                    await setScreenImageFromFile(targetFile);
                 }
             }
 
-            // 使用背景 Off-screen 克隆方式產圖，畫面完全不跳動
-            const currentImgSrc = fileDataUrl || displayScreen.src;
-            const canvas = await captureOffscreenPromoCard(title, subtitle, currentImgSrc);
+            // 使用與單張一致的畫布渲染機制，確保品質、字型、外框 100% 相同
+            const canvas = await capturePromoCardCanvasBatch();
             const imgData = canvas.toDataURL('image/png').split(',')[1];
             
             // 檔名與路徑規劃：/語言/語言+截圖檔名.png
@@ -976,6 +936,11 @@ async function processBatch() {
         console.error("批次產圖失敗:", err);
         alert(t('alert_export_error'));
     } finally {
+        // 批次結束後恢復原本的縮放比例
+        if (scaler) {
+            scaler.style.transform = originalTransform;
+            scaler.style.transition = originalTransition;
+        }
         if (btnBatch) {
             btnBatch.innerHTML = originalBtnText;
             btnBatch.disabled = false;
