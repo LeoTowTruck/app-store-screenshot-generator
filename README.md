@@ -4,6 +4,10 @@
 
 🔗 **線上直接使用網址 (Live Demo)**：  
 👉 https://leotowtruck.github.io/app-store-screenshot-generator/
+
+🎬 **教學影片 (Tutorial Video)**：  
+👉 https://www.youtube.com/watch?v=XdRHCgdKSpk
+
 ---
 
 ## ✨ 核心特色 (Features)
