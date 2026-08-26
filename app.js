@@ -233,7 +233,7 @@ document.getElementById('subtitle-font').addEventListener('change', (e) => {
 });
 
 // ==========================================
-// 8. 圖片素材上傳與拖曳處理 (Image Upload & Drag & Drop)
+// 8. 圖片素材上傳與拖曳處理 (Image Upload & Drag & Drop with Privacy Guard)
 // ==========================================
 const promoCard = document.getElementById('promo-card');
 const bgFileName = document.getElementById('bg-file-name');
@@ -242,6 +242,90 @@ const placeholder = document.getElementById('placeholder');
 const screenFileName = document.getElementById('screen-file-name');
 const uploadBgInput = document.getElementById('upload-bg');
 const uploadScreenInput = document.getElementById('upload-screen');
+
+// 🔒 100% 本機隱私安全保證彈窗控制器 (Privacy Guard Controller)
+let pendingPrivacyAction = null;
+let isBypassingPrivacyCheck = false;
+
+function isPrivacyAcknowledged() {
+    try {
+        return localStorage.getItem('privacy_acknowledged') === 'true';
+    } catch (e) {
+        return false;
+    }
+}
+
+function openPrivacyModal(action) {
+    pendingPrivacyAction = action;
+    const modal = document.getElementById('privacy-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closePrivacyModal() {
+    const modal = document.getElementById('privacy-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    pendingPrivacyAction = null;
+}
+
+function confirmPrivacyAndProceed() {
+    const dontShowAgain = document.getElementById('privacy-dont-show-again');
+    if (dontShowAgain && dontShowAgain.checked) {
+        try {
+            localStorage.setItem('privacy_acknowledged', 'true');
+        } catch (e) {}
+    }
+
+    const action = pendingPrivacyAction;
+    closePrivacyModal();
+
+    if (action) {
+        if (action.type === 'input') {
+            const inputEl = document.getElementById(action.id);
+            if (inputEl) {
+                isBypassingPrivacyCheck = true;
+                inputEl.click();
+                isBypassingPrivacyCheck = false;
+            }
+        } else if (action.type === 'callback' && typeof action.callback === 'function') {
+            action.callback(action.file);
+        }
+    }
+}
+
+function attachPrivacyGuardToFileInput(inputId) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+    
+    inputEl.addEventListener('click', (e) => {
+        if (isBypassingPrivacyCheck || isPrivacyAcknowledged()) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        openPrivacyModal({ type: 'input', id: inputId });
+    });
+}
+
+// 為所有檔案上傳 input 掛載隱私提示防護
+attachPrivacyGuardToFileInput('upload-bg');
+attachPrivacyGuardToFileInput('upload-screen');
+attachPrivacyGuardToFileInput('folder-input');
+
+// 監聽點擊遮罩外圍關閉 Privacy Modal
+const privacyModalOverlay = document.getElementById('privacy-modal');
+if (privacyModalOverlay) {
+    privacyModalOverlay.addEventListener('click', (e) => {
+        if (e.target === privacyModalOverlay) {
+            closePrivacyModal();
+        }
+    });
+}
 
 function setBackgroundImage(file) {
     if (file && file.type.startsWith('image/')) {
@@ -270,14 +354,22 @@ function setScreenImage(file) {
 uploadBgInput.addEventListener('change', (e) => setBackgroundImage(e.target.files[0]));
 uploadScreenInput.addEventListener('change', (e) => setScreenImage(e.target.files[0]));
 
-// 點擊預覽卡片或手機觸發上傳
+// 點擊預覽卡片或手機觸發上傳 (受隱私彈窗保護)
 phoneMockup.addEventListener('click', (e) => {
     e.stopPropagation();
-    uploadScreenInput.click();
+    if (isPrivacyAcknowledged()) {
+        uploadScreenInput.click();
+    } else {
+        openPrivacyModal({ type: 'input', id: 'upload-screen' });
+    }
 });
 
 promoCard.addEventListener('click', () => {
-    uploadBgInput.click();
+    if (isPrivacyAcknowledged()) {
+        uploadBgInput.click();
+    } else {
+        openPrivacyModal({ type: 'input', id: 'upload-bg' });
+    }
 });
 
 // 防止瀏覽器預設拖曳開圖行為
@@ -293,14 +385,21 @@ function setupDragDropBox(boxId, handleFile) {
     box.addEventListener('drop', (e) => {
         e.preventDefault();
         box.classList.remove('dragover');
-        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+        if (e.dataTransfer.files.length > 0) {
+            const file = e.dataTransfer.files[0];
+            if (isPrivacyAcknowledged()) {
+                handleFile(file);
+            } else {
+                openPrivacyModal({ type: 'callback', callback: handleFile, file: file });
+            }
+        }
     });
 }
 
 setupDragDropBox('bg-upload-box', setBackgroundImage);
 setupDragDropBox('screen-upload-box', setScreenImage);
 
-// 手機畫面區塊拖曳
+// 手機畫面區塊拖曳 (受隱私彈窗保護)
 phoneMockup.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -317,11 +416,16 @@ phoneMockup.addEventListener('drop', (e) => {
     e.stopPropagation();
     phoneMockup.classList.remove('dragover');
     if (e.dataTransfer.files.length > 0) {
-        setScreenImage(e.dataTransfer.files[0]);
+        const file = e.dataTransfer.files[0];
+        if (isPrivacyAcknowledged()) {
+            setScreenImage(file);
+        } else {
+            openPrivacyModal({ type: 'callback', callback: setScreenImage, file: file });
+        }
     }
 });
 
-// 全卡片背景拖曳
+// 全卡片背景拖曳 (受隱私彈窗保護)
 promoCard.addEventListener('dragover', (e) => {
     e.preventDefault();
     promoCard.classList.add('dragover');
@@ -334,7 +438,12 @@ promoCard.addEventListener('drop', (e) => {
     e.preventDefault();
     promoCard.classList.remove('dragover');
     if (e.dataTransfer.files.length > 0) {
-        setBackgroundImage(e.dataTransfer.files[0]);
+        const file = e.dataTransfer.files[0];
+        if (isPrivacyAcknowledged()) {
+            setBackgroundImage(file);
+        } else {
+            openPrivacyModal({ type: 'callback', callback: setBackgroundImage, file: file });
+        }
     }
 });
 
@@ -1122,10 +1231,17 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 按下鍵盤 Esc 鍵關閉展開的試算表
+    // 按下鍵盤 Esc 鍵關閉展開的試算表或隱私提示視窗
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isModalOpen) {
-            openSpreadsheetModal(false);
+        if (e.key === 'Escape') {
+            const privacyModal = document.getElementById('privacy-modal');
+            if (privacyModal && privacyModal.style.display !== 'none') {
+                closePrivacyModal();
+                return;
+            }
+            if (isModalOpen) {
+                openSpreadsheetModal(false);
+            }
         }
     });
 });

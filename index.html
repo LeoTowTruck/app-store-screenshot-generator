@@ -74,6 +74,9 @@
             🎨 <span data-i18n="app_title">宣傳圖生成器</span>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
+            <a href="https://buymeacoffee.com/roadSavior" target="_blank" rel="noopener noreferrer" class="bmc-btn bmc-btn-mobile" title="Buy me a coffee" aria-label="Buy me a coffee">
+                <span class="bmc-icon">☕</span>
+            </a>
             <div class="lang-select-container">
                 <select id="lang-select-mobile" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language switch">
                     <option value="en" selected>🇺🇸 English</option>
@@ -366,7 +369,7 @@
                             <div class="sheet-fx-bar">
                                 <span class="sheet-fx-cell-name" id="sheet-cell-ref-inline">A1</span>
                                 <span class="sheet-fx-icon">fx</span>
-                                <input type="text" class="sheet-fx-input" id="sheet-fx-input-inline" placeholder="點選儲存格直接編輯..." />
+                                <input type="text" class="sheet-fx-input" id="sheet-fx-input-inline" placeholder="點選儲存格直接編輯..." data-i18n-placeholder="placeholder_cell_edit" />
                                 <button type="button" class="sheet-fx-expand-btn" onclick="openSpreadsheetModal(true)" title="展開全螢幕試算表" aria-label="展開全螢幕試算表">
                                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="15 3 21 3 21 9"></polyline>
@@ -394,7 +397,7 @@
                             </div>
                             <div class="sheet-footer-bar">
                                 <span id="sheet-row-count-inline">共 4 列資料</span>
-                                <button type="button" class="sheet-add-btn-mini" onclick="addSheetRow()">➕ 新增一列 (Tab)</button>
+                                <button type="button" class="sheet-add-btn-mini" onclick="addSheetRow()" data-i18n="btn_add_row_tab">➕ 新增一列 (Tab)</button>
                             </div>
                         </div>
                     </div>
@@ -425,6 +428,10 @@
                     <button class="btn-toolbar-download" onclick="downloadPromoCard()" title="下載宣傳圖" data-i18n="toolbar_download">
                         💾 下載
                     </button>
+                    <!-- ☕ Buy Me a Coffee 贊助按鈕 -->
+                    <a href="https://buymeacoffee.com/roadSavior" target="_blank" rel="noopener noreferrer" class="bmc-btn bmc-btn-desktop" title="Buy me a coffee" aria-label="Buy me a coffee">
+                        <span class="bmc-text" data-i18n="btn_buy_me_coffee">☕ 請作者喝杯咖啡</span>
+                    </a>
                     <!-- 🌐 最右上角語言切換選單 (Desktop) -->
                     <div class="lang-select-container lang-select-desktop-container">
                         <select id="lang-select-desktop" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language switch">
@@ -509,6 +516,65 @@
                 <div class="modal-footer-tips">
                     <span>💡 快捷鍵：<b>Tab</b> 下一格、<b>Enter</b> 下一行、<b>Ctrl+V</b> 貼上外部 Excel 資料</span>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 100% 本機端隱私與資料安全保證彈窗 (Privacy & Local Security Disclaimer Modal) -->
+    <div id="privacy-modal" class="privacy-modal-overlay" style="display: none;">
+        <div class="privacy-modal-card">
+            <div class="privacy-modal-header">
+                <div class="privacy-icon-badge">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+                <div class="privacy-header-text">
+                    <h3 class="privacy-modal-title" data-i18n="privacy_modal_title">🔒 本機隱私與資料安全保證</h3>
+                    <p class="privacy-modal-subtitle" data-i18n="privacy_modal_subtitle">您的圖片與資料全程在瀏覽器本機端運作，請安心使用</p>
+                </div>
+                <button type="button" class="privacy-close-btn" onclick="closePrivacyModal()" aria-label="Close">✕</button>
+            </div>
+            
+            <div class="privacy-modal-body">
+                <div class="privacy-feature-list">
+                    <div class="privacy-feature-item">
+                        <div class="privacy-feature-icon">🛡️</div>
+                        <div class="privacy-feature-text">
+                            <strong data-i18n="privacy_point1_title">絕不上傳至任何伺服器</strong>
+                            <span data-i18n="privacy_point1_desc">所有截圖、資料夾、背景圖及試算表文字，均純粹在您當前裝置的瀏覽器內部記憶體中合成與渲染，絕無任何外部傳輸。</span>
+                        </div>
+                    </div>
+                    <div class="privacy-feature-item">
+                        <div class="privacy-feature-icon">⚡</div>
+                        <div class="privacy-feature-text">
+                            <strong data-i18n="privacy_point2_title">零外洩風險，即用即清</strong>
+                            <span data-i18n="privacy_point2_desc">本工具無任何後端伺服器或資料庫儲存您的私人素材，關閉或重新整理網頁後資料立即自記憶體清除。</span>
+                        </div>
+                    </div>
+                    <div class="privacy-feature-item">
+                        <div class="privacy-feature-icon">🚀</div>
+                        <div class="privacy-feature-text">
+                            <strong data-i18n="privacy_point3_title">極速本機渲染與打包</strong>
+                            <span data-i18n="privacy_point3_desc">透過 HTML5 Canvas 在本機端秒速輸出 1242 × 2688 高解析度圖片並直接打包 ZIP 下載。</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="privacy-modal-options">
+                    <label class="privacy-checkbox-label">
+                        <input type="checkbox" id="privacy-dont-show-again">
+                        <span data-i18n="privacy_dont_show">我知道了，下次不再提示</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="privacy-modal-footer">
+                <button type="button" class="privacy-btn-cancel" onclick="closePrivacyModal()" data-i18n="privacy_btn_cancel">取消</button>
+                <button type="button" class="privacy-btn-confirm" onclick="confirmPrivacyAndProceed()" data-i18n="privacy_btn_confirm">
+                    ✓ 我了解，繼續選擇檔案
+                </button>
             </div>
         </div>
     </div>
