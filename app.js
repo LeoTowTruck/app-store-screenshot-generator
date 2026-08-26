@@ -1250,7 +1250,7 @@ async function changeLanguage(lang) {
 }
 
 // 頁面初始化執行自適應縮放、試算表初始化與語系載入
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
     changeLanguage(currentLang);
     renderAllSpreadsheets();
     setTimeout(updateAutoFitScale, 100);
