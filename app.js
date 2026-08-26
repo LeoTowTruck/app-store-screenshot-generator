@@ -1128,10 +1128,16 @@ function detectUserLanguage() {
             }
         }
 
-        // 中文系語言標籤處理 (zh, zh-TW, zh-HK, zh-MO, zh-CN, zh-Hant, zh-Hans)
+        // 中文系語言標籤處理
         if (normalized.startsWith('zh')) {
-            // 若為繁體相關或通用中文，優先對應 zh-TW
-            if (i18n['zh-TW']) return 'zh-TW';
+            // 如果明確是簡體特徵，且你有支援 zh-CN
+            if ((normalized.includes('cn') || normalized.includes('hans') || normalized.includes('sg')) && i18n['zh-CN']) {
+                return 'zh-CN';
+            }
+            // 其他情況（或繁體相關、通用 zh）優先對應 zh-TW
+            if (i18n['zh-TW']) {
+                return 'zh-TW';
+            }
         }
 
         // 英文系語言標籤處理 (en, en-US, en-GB, en-AU 等)
@@ -1162,8 +1168,14 @@ function t(key, params = {}) {
     return str;
 }
 
-function changeLanguage(lang) {
-    if (!i18n[lang]) return;
+async function changeLanguage(lang) {
+    if (!i18n[lang] && typeof loadLocale === 'function') {
+        await loadLocale(lang);
+    }
+    if (!i18n[lang]) {
+        console.warn(`Language ${lang} not found, keeping current.`);
+        return;
+    }
     
     // 檢查是否需同步更新預設文案
     const oldLang = currentLang;
@@ -1188,7 +1200,7 @@ function changeLanguage(lang) {
     // 替換所有具有 data-i18n 的元素文字
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (key && i18n[currentLang][key]) {
+        if (key && i18n[currentLang] && i18n[currentLang][key]) {
             el.innerText = i18n[currentLang][key];
         }
     });
@@ -1196,7 +1208,7 @@ function changeLanguage(lang) {
     // 替換 placeholder
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (key && i18n[currentLang][key]) {
+        if (key && i18n[currentLang] && i18n[currentLang][key]) {
             el.setAttribute('placeholder', i18n[currentLang][key]);
         }
     });
@@ -1204,7 +1216,7 @@ function changeLanguage(lang) {
     // 替換 optgroup label
     document.querySelectorAll('[data-i18n-label]').forEach(el => {
         const key = el.getAttribute('data-i18n-label');
-        if (key && i18n[currentLang][key]) {
+        if (key && i18n[currentLang] && i18n[currentLang][key]) {
             el.setAttribute('label', i18n[currentLang][key]);
         }
     });

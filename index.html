@@ -81,6 +81,29 @@
                 <select id="lang-select-mobile" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language switch">
                     <option value="en" selected>🇺🇸 English</option>
                     <option value="zh-TW">🇹🇼 繁體中文</option>
+                    <option value="zh-CN">🇨🇳 简体中文</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="ko">🇰🇷 한국어</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="it">🇮🇹 Italiano</option>
+                    <option value="nl">🇳🇱 Nederlands</option>
+                    <option value="sv">🇸🇪 Svenska</option>
+
+                    <option value="da">🇩🇰 Dansk</option>
+                    <option value="fi">🇫🇮 Suomi</option>
+                    <option value="pl">🇵🇱 Polski</option>
+                    <option value="hu">🇭🇺 Magyar</option>
+                    <option value="tr">🇹🇷 Türkçe</option>
+                    <option value="ms">🇲🇾 Bahasa Melayu</option>
+                    <option value="th">🇹🇭 ไทย</option>
+                    <option value="vi">🇻🇳 Tiếng Việt</option>
+                    <option value="id">🇮🇩 Bahasa Indonesia</option>
+                    <option value="tl">🇵🇭 Tagalog</option>
+                    <option value="pt-BR">🇧🇷 Português (Brasil)</option>
+                    <option value="hi">🇮🇳 हिन्दी</option>
+                    <option value="ar">🇸🇦 العربية</option>
                 </select>
             </div>
             <nav class="mobile-nav-tabs" aria-label="行動版導航">
@@ -138,16 +161,16 @@
                             <div class="form-group">
                                 <label data-i18n="label_font_color">字體顏色</label>
                                 <div class="color-preset-group" id="title-colors">
-                                    <div class="color-btn selected" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="純白"></div>
-                                    <div class="color-btn" style="background-color: #1a1a1a;" data-color="#1a1a1a" title="質感深灰黑"></div>
-                                    <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="琥珀金"></div>
-                                    <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="奢華金"></div>
-                                    <div class="color-btn" style="background-color: #2563eb;" data-color="#2563eb" title="科技藍"></div>
-                                    <div class="color-btn" style="background-color: #06b6d4;" data-color="#06b6d4" title="青空藍"></div>
-                                    <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="翡翠綠"></div>
-                                    <div class="color-btn" style="background-color: #dc2626;" data-color="#dc2626" title="醒目紅"></div>
-                                    <div class="color-btn" style="background-color: #ec4899;" data-color="#ec4899" title="玫瑰粉"></div>
-                                    <div class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6" title="夢幻紫"></div>
+                                    <div class="color-btn selected" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="White"></div>
+                                    <div class="color-btn" style="background-color: #1a1a1a;" data-color="#1a1a1a" title="Dark Charcoal"></div>
+                                    <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="Amber Gold"></div>
+                                    <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="Luxury Gold"></div>
+                                    <div class="color-btn" style="background-color: #2563eb;" data-color="#2563eb" title="Tech Blue"></div>
+                                    <div class="color-btn" style="background-color: #06b6d4;" data-color="#06b6d4" title="Cyan Blue"></div>
+                                    <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="Emerald Green"></div>
+                                    <div class="color-btn" style="background-color: #dc2626;" data-color="#dc2626" title="Vibrant Red"></div>
+                                    <div class="color-btn" style="background-color: #ec4899;" data-color="#ec4899" title="Rose Pink"></div>
+                                    <div class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6" title="Violet Purple"></div>
                                 </div>
                             </div>
 
@@ -155,18 +178,18 @@
                                 <label for="title-font" data-i18n="label_font_family">字體樣式</label>
                                 <select id="title-font">
                                     <optgroup label="繁體中文標題" data-i18n-label="font_group_zh_title">
-                                        <option value="'Noto Sans TC', sans-serif">思源黑體 (現代俐落)</option>
-                                        <option value="'Noto Serif TC', serif">思源宋體 (經典質感)</option>
-                                        <option value="'ZCOOL KuaiLe', cursive">快樂體 (活潑手寫)</option>
-                                        <option value="'Ma Shan Zheng', cursive">馬善政毛筆體 (霸氣書法)</option>
-                                        <option value="'Kiwi Maru', serif">奇異果丸體 (日系可愛)</option>
-                                        <option value="'Microsoft JhengHei', sans-serif">微軟正黑體</option>
+                                        <option value="'Noto Sans TC', sans-serif" data-i18n="font_opt_noto_sans_tc">思源黑體 (現代俐落)</option>
+                                        <option value="'Noto Serif TC', serif" data-i18n="font_opt_noto_serif_tc">思源宋體 (經典質感)</option>
+                                        <option value="'ZCOOL KuaiLe', cursive" data-i18n="font_opt_zcool_kuaile">快樂體 (活潑手寫)</option>
+                                        <option value="'Ma Shan Zheng', cursive" data-i18n="font_opt_ma_shan_zheng">馬善政毛筆體 (霸氣書法)</option>
+                                        <option value="'Kiwi Maru', serif" data-i18n="font_opt_kiwi_maru">奇異果丸體 (日系可愛)</option>
+                                        <option value="'Microsoft JhengHei', sans-serif" data-i18n="font_opt_ms_jhenghei">微軟正黑體</option>
                                     </optgroup>
                                     <optgroup label="英文字體 (特別推薦主標題)" data-i18n-label="font_group_en_title">
-                                        <option value="'Plus Jakarta Sans', sans-serif">Jakarta (現代圓潤)</option>
-                                        <option value="'Bebas Neue', cursive">Bebas Neue (美式/電影大標)</option>
-                                        <option value="'Chakra Petch', sans-serif">Chakra Petch (賽博科技)</option>
-                                        <option value="'Caveat', cursive">Caveat (隨性手寫體)</option>
+                                        <option value="'Plus Jakarta Sans', sans-serif" data-i18n="font_opt_jakarta">Jakarta (現代圓潤)</option>
+                                        <option value="'Bebas Neue', cursive" data-i18n="font_opt_bebas_neue">Bebas Neue (美式/電影大標)</option>
+                                        <option value="'Chakra Petch', sans-serif" data-i18n="font_opt_chakra_petch">Chakra Petch (賽博科技)</option>
+                                        <option value="'Caveat', cursive" data-i18n="font_opt_caveat">Caveat (隨性手寫體)</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -204,15 +227,15 @@
                             <div class="form-group">
                                 <label data-i18n="label_font_color">字體顏色</label>
                                 <div class="color-preset-group" id="subtitle-colors">
-                                    <div class="color-btn selected" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="純白"></div>
-                                    <div class="color-btn" style="background-color: #333333;" data-color="#333333" title="深灰"></div>
-                                    <div class="color-btn" style="background-color: #6b7280;" data-color="#6b7280" title="中性灰"></div>
-                                    <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="琥珀金"></div>
-                                    <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="奢華金"></div>
-                                    <div class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6" title="天空藍"></div>
-                                    <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="清新綠"></div>
-                                    <div class="color-btn" style="background-color: #ef4444;" data-color="#ef4444" title="活力紅"></div>
-                                    <div class="color-btn" style="background-color: #a855f7;" data-color="#a855f7" title="優雅紫"></div>
+                                    <div class="color-btn selected" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="White"></div>
+                                    <div class="color-btn" style="background-color: #333333;" data-color="#333333" title="Dark Gray"></div>
+                                    <div class="color-btn" style="background-color: #6b7280;" data-color="#6b7280" title="Neutral Gray"></div>
+                                    <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="Amber Gold"></div>
+                                    <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="Luxury Gold"></div>
+                                    <div class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6" title="Sky Blue"></div>
+                                    <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="Mint Green"></div>
+                                    <div class="color-btn" style="background-color: #ef4444;" data-color="#ef4444" title="Vibrant Red"></div>
+                                    <div class="color-btn" style="background-color: #a855f7;" data-color="#a855f7" title="Purple"></div>
                                 </div>
                             </div>
 
@@ -220,14 +243,14 @@
                                 <label for="subtitle-font" data-i18n="label_font_family">字體樣式</label>
                                 <select id="subtitle-font">
                                     <optgroup label="中文內文" data-i18n-label="font_group_zh_sub">
-                                        <option value="'Noto Sans TC', sans-serif">思源黑體 (清晰易讀)</option>
-                                        <option value="'Noto Serif TC', serif">思源宋體 (文青質感)</option>
-                                        <option value="'Kiwi Maru', serif">奇異果丸體 (溫柔親和)</option>
-                                        <option value="'Microsoft JhengHei', sans-serif">微軟正黑體</option>
+                                        <option value="'Noto Sans TC', sans-serif" data-i18n="font_opt_sub_noto_sans_tc">思源黑體 (清晰易讀)</option>
+                                        <option value="'Noto Serif TC', serif" data-i18n="font_opt_sub_noto_serif_tc">思源宋體 (文青質感)</option>
+                                        <option value="'Kiwi Maru', serif" data-i18n="font_opt_sub_kiwi_maru">奇異果丸體 (溫柔親和)</option>
+                                        <option value="'Microsoft JhengHei', sans-serif" data-i18n="font_opt_sub_ms_jhenghei">微軟正黑體</option>
                                     </optgroup>
                                     <optgroup label="英文內文" data-i18n-label="font_group_en_sub">
-                                        <option value="'Plus Jakarta Sans', sans-serif">Jakarta Sans</option>
-                                        <option value="Arial, sans-serif">Arial Standard</option>
+                                        <option value="'Plus Jakarta Sans', sans-serif" data-i18n="font_opt_sub_jakarta">Jakarta Sans</option>
+                                        <option value="Arial, sans-serif" data-i18n="font_opt_sub_arial">Arial Standard</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -247,16 +270,16 @@
                     <div class="form-group">
                         <label data-i18n="label_border_color">邊框外光暈 / 邊框顏色選擇 (預設透明)</label>
                         <div class="color-preset-group" id="phone-border-colors">
-                            <div class="color-btn transparent-btn selected" data-color="transparent" title="透明邊框 (預設)"></div>
-                            <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="奢華金"></div>
-                            <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="琥珀金"></div>
-                            <div class="color-btn" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="純白"></div>
-                            <div class="color-btn" style="background-color: #9ca3af;" data-color="#9ca3af" title="太空銀"></div>
-                            <div class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6" title="科技藍"></div>
-                            <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="薄荷綠"></div>
-                            <div class="color-btn" style="background-color: #ef4444;" data-color="#ef4444" title="熱情紅"></div>
-                            <div class="color-btn" style="background-color: #ec4899;" data-color="#ec4899" title="時尚粉"></div>
-                            <div class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6" title="深邃紫"></div>
+                            <div class="color-btn transparent-btn selected" data-color="transparent" title="Transparent (Default)"></div>
+                            <div class="color-btn" style="background-color: #d4af37;" data-color="#d4af37" title="Luxury Gold"></div>
+                            <div class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b" title="Amber Gold"></div>
+                            <div class="color-btn" style="background-color: #ffffff; border: 1px solid #444;" data-color="#ffffff" title="White"></div>
+                            <div class="color-btn" style="background-color: #9ca3af;" data-color="#9ca3af" title="Space Silver"></div>
+                            <div class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6" title="Tech Blue"></div>
+                            <div class="color-btn" style="background-color: #10b981;" data-color="#10b981" title="Mint Green"></div>
+                            <div class="color-btn" style="background-color: #ef4444;" data-color="#ef4444" title="Passionate Red"></div>
+                            <div class="color-btn" style="background-color: #ec4899;" data-color="#ec4899" title="Fashion Pink"></div>
+                            <div class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6" title="Deep Purple"></div>
                         </div>
                     </div>
                 </div>
@@ -272,13 +295,13 @@
                     <div class="form-group">
                         <label data-i18n="label_bg_presets">精選背景漸層與配色預設</label>
                         <div class="color-preset-group" id="bg-presets">
-                            <div class="color-btn selected" style="background: linear-gradient(145deg, #4f46e5, #7c3aed, #ec4899);" data-bg="linear-gradient(145deg, #4f46e5 0%, #7c3aed 45%, #ec4899 100%)" title="霓光幻彩 Neon Sunset (預設)"></div>
-                            <div class="color-btn" style="background: linear-gradient(145deg, #0ea5e9, #6366f1, #a855f7);" data-bg="linear-gradient(145deg, #0ea5e9 0%, #6366f1 50%, #a855f7 100%)" title="賽博極光 Cyber Aurora"></div>
-                            <div class="color-btn" style="background: linear-gradient(145deg, #f97316, #ec4899, #8b5cf6);" data-bg="linear-gradient(145deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%)" title="暮光暖陽 Twilight Coral"></div>
-                            <div class="color-btn" style="background: linear-gradient(145deg, #059669, #0d9488, #0284c7);" data-bg="linear-gradient(145deg, #059669 0%, #0d9488 50%, #0284c7 100%)" title="清新薄荷 Emerald Breeze"></div>
-                            <div class="color-btn" style="background: linear-gradient(145deg, #1e3a8a, #3b82f6, #60a5fa);" data-bg="linear-gradient(145deg, #1e3a8a 0%, #3b82f6 60%, #60a5fa 100%)" title="皇家科技藍 Royal Blue"></div>
-                            <div class="color-btn" style="background: linear-gradient(145deg, #0f172a, #1e1b4b, #312e81);" data-bg="linear-gradient(145deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)" title="奢華暗夜 Midnight Obsidian"></div>
-                            <div class="color-btn" style="background-color: #fcf8ee; border: 1px solid #666;" data-bg="#fcf8ee" title="經典極簡米白 Light Cream"></div>
+                            <div class="color-btn selected" style="background: linear-gradient(145deg, #4f46e5, #7c3aed, #ec4899);" data-bg="linear-gradient(145deg, #4f46e5 0%, #7c3aed 45%, #ec4899 100%)" title="Neon Sunset (Default)"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #0ea5e9, #6366f1, #a855f7);" data-bg="linear-gradient(145deg, #0ea5e9 0%, #6366f1 50%, #a855f7 100%)" title="Cyber Aurora"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #f97316, #ec4899, #8b5cf6);" data-bg="linear-gradient(145deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%)" title="Twilight Coral"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #059669, #0d9488, #0284c7);" data-bg="linear-gradient(145deg, #059669 0%, #0d9488 50%, #0284c7 100%)" title="Emerald Breeze"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #1e3a8a, #3b82f6, #60a5fa);" data-bg="linear-gradient(145deg, #1e3a8a 0%, #3b82f6 60%, #60a5fa 100%)" title="Royal Blue"></div>
+                            <div class="color-btn" style="background: linear-gradient(145deg, #0f172a, #1e1b4b, #312e81);" data-bg="linear-gradient(145deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)" title="Midnight Obsidian"></div>
+                            <div class="color-btn" style="background-color: #fcf8ee; border: 1px solid #666;" data-bg="#fcf8ee" title="Light Cream"></div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -327,7 +350,7 @@
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;">
                                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                                     </svg>
-                                    <span data-i18n="btn_yt_tutorial">▶ 觀看 YouTube 影片教學</span>
+                                    <span data-i18n="btn_yt_tutorial">觀看 YouTube 影片教學</span>
                                 </a>
 
                                 <!-- 📊 開啟範本按鈕 -->
@@ -437,8 +460,32 @@
                         <select id="lang-select-desktop" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language switch">
                             <option value="en" selected>🇺🇸 English</option>
                             <option value="zh-TW">🇹🇼 繁體中文</option>
+                            <option value="zh-CN">🇨🇳 简体中文</option>
+                            <option value="ja">🇯🇵 日本語</option>
+                            <option value="ko">🇰🇷 한국어</option>
+                            <option value="fr">🇫🇷 Français</option>
+                            <option value="de">🇩🇪 Deutsch</option>
+                            <option value="es">🇪🇸 Español</option>
+                            <option value="it">🇮🇹 Italiano</option>
+                            <option value="nl">🇳🇱 Nederlands</option>
+                            <option value="sv">🇸🇪 Svenska</option>
+
+                            <option value="da">🇩🇰 Dansk</option>
+                            <option value="fi">🇫🇮 Suomi</option>
+                            <option value="pl">🇵🇱 Polski</option>
+                            <option value="hu">🇭🇺 Magyar</option>
+                            <option value="tr">🇹🇷 Türkçe</option>
+                            <option value="ms">🇲🇾 Bahasa Melayu</option>
+                            <option value="th">🇹🇭 ไทย</option>
+                            <option value="vi">🇻🇳 Tiếng Việt</option>
+                            <option value="id">🇮🇩 Bahasa Indonesia</option>
+                            <option value="tl">🇵🇭 Tagalog</option>
+                            <option value="pt-BR">🇧🇷 Português (Brasil)</option>
+                            <option value="hi">🇮🇳 हिन्दी</option>
+                            <option value="ar">🇸🇦 العربية</option>
                         </select>
                     </div>
+
                 </div>
             </div>
 
