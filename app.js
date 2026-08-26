@@ -565,8 +565,14 @@ async function downloadPromoCard() {
         const canvas = await capturePromoCardCanvas();
         const link = document.createElement('a');
         const cleanTitle = (inputTitle.value || 'promo').trim().replace(/[/\\?%*:|"<>]/g, '_');
-        link.download = `${cleanTitle}_1242x2688.png`;
-        link.href = canvas.toDataURL('image/png');
+        
+        // 1. 將副檔名改為 .jpg
+        link.download = `${cleanTitle}_1242x2688.jpg`;
+        
+        // 2. 將格式改為 'image/jpeg'，並設定 0.95 的高品質壓縮
+        // 這樣可以強制移除透明色頻（Alpha 通道），並自動用白色填滿背景
+        link.href = canvas.toDataURL('image/jpeg', 0.95);
+        
         link.click();
     } catch (err) {
         console.error("產圖失敗:", err);
