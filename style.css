@@ -587,6 +587,498 @@ textarea {
     width: 100%;
 }
 
+/* 試算表格與頂部控制列 */
+.table-control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.table-control-header label {
+    margin-bottom: 0;
+}
+
+.table-quick-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.tbl-action-btn {
+    background-color: #24242b;
+    border: 1px solid #3d3d46;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tbl-action-btn:hover {
+    background-color: #32323c;
+    color: var(--text-primary);
+    border-color: var(--accent);
+}
+
+.btn-expand-sheet-full {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1px solid #f59e0b;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.primary-btn-glow {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.25));
+    border-color: #f59e0b;
+    color: #fbbf24 !important;
+}
+
+.primary-btn-glow:hover {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #0c0d0e !important;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+/* Google Sheets 風格試算表容器 */
+.sheet-inline-container {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #33333f;
+    background-color: #16161b;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 公式與儲存格參照列 (fx bar) */
+.sheet-fx-bar {
+    display: flex;
+    align-items: center;
+    background-color: #1e1e26;
+    border-bottom: 1px solid #2d2d38;
+    padding: 4px 8px;
+    gap: 6px;
+}
+
+.sheet-fx-cell-name {
+    min-width: 38px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fbbf24;
+    text-align: center;
+    background-color: #272732;
+    padding: 3px 6px;
+    border-radius: 4px;
+    border: 1px solid #3d3d4e;
+    user-select: none;
+}
+
+.sheet-fx-icon {
+    font-size: 12px;
+    font-weight: 800;
+    color: #a1a1aa;
+    font-style: italic;
+    font-family: serif;
+    padding: 0 4px;
+    user-select: none;
+}
+
+.sheet-fx-input {
+    flex: 1;
+    background-color: #141418;
+    border: 1px solid #2e2e3a;
+    border-radius: 4px;
+    color: #f4f4f5;
+    font-size: 12px;
+    padding: 4px 8px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.sheet-fx-input:focus {
+    border-color: #f59e0b;
+    background-color: #191920;
+}
+
+.sheet-fx-expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #272732;
+    border: 1px solid #3e3e50;
+    border-radius: 4px;
+    color: #fbbf24;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.sheet-fx-expand-btn:hover {
+    background-color: #f59e0b;
+    border-color: #fbbf24;
+    color: #0c0d0e;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    transform: scale(1.05);
+}
+
+/* 試算表捲動區域與表格 */
+.sheet-table-scroll {
+    max-height: 250px;
+    overflow: auto;
+    background-color: #141418;
+}
+
+.sheet-table-scroll.modal-scroll {
+    max-height: calc(90vh - 160px);
+    height: 100%;
+}
+
+.sheet-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 12px;
+}
+
+.sheet-table th, 
+.sheet-table td {
+    border-right: 1px solid #2a2a36;
+    border-bottom: 1px solid #2a2a36;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 表頭 (A, B, C, D) */
+.sheet-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #1c1c24;
+    color: #d4d4d8;
+    font-weight: 600;
+    font-size: 11.5px;
+    text-align: left;
+    padding: 6px 8px;
+    z-index: 10;
+    user-select: none;
+}
+
+.th-corner {
+    width: 36px;
+    background-color: #181820 !important;
+    text-align: center !important;
+}
+
+.th-col {
+    white-space: nowrap;
+}
+
+.col-letter {
+    display: inline-block;
+    color: #fbbf24;
+    font-weight: 800;
+    margin-right: 6px;
+    font-size: 11px;
+}
+
+.col-name {
+    color: #e4e4e7;
+    font-weight: 600;
+    font-size: 11.5px;
+}
+
+.th-action {
+    width: 44px;
+    text-align: center !important;
+}
+
+/* 行號 (1, 2, 3...) */
+.td-row-num {
+    width: 36px;
+    background-color: #1a1a22;
+    color: #71717a;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+.td-row-num:hover {
+    background-color: #262632;
+    color: #fbbf24;
+}
+
+/* 儲存格輸入框 */
+.sheet-cell-input {
+    width: 100%;
+    height: 32px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #f4f4f5;
+    font-size: 12px;
+    padding: 4px 8px;
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+.sheet-cell-input:focus {
+    background-color: #1e1e28;
+    border: 1.5px solid #f59e0b !important;
+    color: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.2);
+}
+
+.sheet-table tr.active-row td {
+    background-color: rgba(245, 158, 11, 0.08);
+}
+
+.sheet-table tr:hover td {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* 刪除列按鈕 */
+.td-delete-cell {
+    text-align: center;
+    width: 44px;
+}
+
+.btn-del-row {
+    background: transparent;
+    border: none;
+    color: #71717a;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 3px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-del-row:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.15);
+}
+
+/* 底部列 */
+.sheet-footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a22;
+    padding: 6px 12px;
+    border-top: 1px solid #2d2d38;
+    font-size: 11px;
+    color: #a1a1aa;
+}
+
+.sheet-add-btn-mini {
+    background-color: #262632;
+    border: 1px solid #3c3c4e;
+    color: #fbbf24;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sheet-add-btn-mini:hover {
+    background-color: #353545;
+    border-color: #f59e0b;
+}
+
+/* 全螢幕 / 展開試算表彈跳視窗 Modal */
+.spreadsheet-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(6px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.spreadsheet-modal-container {
+    width: 100%;
+    max-width: 1300px;
+    height: 88vh;
+    background-color: #16161c;
+    border: 1px solid #3d3d4e;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+.spreadsheet-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background-color: #121216;
+    border-bottom: 1px solid #2d2d38;
+    position: relative;
+    gap: 16px;
+}
+
+.modal-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-app-icon {
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-subtitle {
+    font-size: 11.5px;
+    color: #a1a1aa;
+    margin: 2px 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.modal-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.modal-btn-secondary {
+    background-color: #262632;
+    border: 1px solid #3e3e50;
+    color: #e4e4e7;
+}
+
+.modal-btn-secondary:hover {
+    background-color: #333342;
+    color: #ffffff;
+}
+
+.modal-btn-primary {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border: none;
+    color: #0c0d0e;
+    font-weight: 700;
+}
+
+.modal-btn-primary:hover {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
+}
+
+.modal-close-btn {
+    background: #20202a;
+    border: 1px solid #333344;
+    color: #a1a1aa;
+    font-size: 16px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.modal-close-btn:hover {
+    color: #ffffff;
+    background-color: #3b3b4d;
+    border-color: #4f4f66;
+}
+
+.sheet-modal-fx {
+    background-color: #191922;
+    border-bottom: 1px solid #2c2c3a;
+    padding: 8px 16px;
+}
+
+.spreadsheet-modal-body {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #141418;
+}
+
+.spreadsheet-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #121216;
+    padding: 10px 20px;
+    border-top: 1px solid #2d2d38;
+    font-size: 12px;
+    color: #a1a1aa;
+}
+
+.modal-footer-tips {
+    color: #71717a;
+    font-size: 11.5px;
+}
+
 /* 右側即時預覽區塊 */
 .preview-wrapper {
     flex: 1;
@@ -1059,3 +1551,125 @@ textarea {
         padding: 12px;
     }
 }
+
+/* ========================================================
+   試算表大視窗響應式優化 (Spreadsheet Modal Responsive Fix)
+   ======================================================== */
+#sheet-table-modal {
+    min-width: 680px;
+}
+
+@media (max-width: 860px) {
+    .spreadsheet-modal-overlay {
+        padding: 12px;
+    }
+
+    .spreadsheet-modal-container {
+        height: 94vh;
+        border-radius: 10px;
+    }
+
+    .spreadsheet-modal-header {
+        position: relative;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 14px 10px 14px;
+        gap: 10px;
+    }
+
+    .modal-title-group {
+        padding-right: 44px;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        z-index: 10;
+    }
+
+    .modal-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        width: 100%;
+    }
+
+    .modal-actions .modal-btn {
+        padding: 6px 4px;
+        font-size: 11px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sheet-modal-fx {
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 540px) {
+    .spreadsheet-modal-overlay {
+        padding: 6px;
+    }
+
+    .spreadsheet-modal-container {
+        height: 97vh;
+        border-radius: 8px;
+    }
+
+    .spreadsheet-modal-header {
+        padding: 10px 10px 8px 10px;
+        gap: 8px;
+    }
+
+    .modal-app-icon {
+        font-size: 22px;
+    }
+
+    .modal-title {
+        font-size: 13.5px;
+    }
+
+    .modal-subtitle {
+        display: none;
+    }
+
+    .modal-title-group {
+        padding-right: 40px;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        z-index: 10;
+    }
+
+    .modal-actions {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+
+    .modal-actions .modal-btn {
+        padding: 7px 6px;
+        font-size: 11.5px;
+    }
+
+    .sheet-modal-fx {
+        padding: 5px 8px;
+    }
+
+    .spreadsheet-modal-footer {
+        padding: 6px 10px;
+    }
+
+    .modal-footer-tips {
+        display: none;
+    }
+}
+
