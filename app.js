@@ -1030,11 +1030,11 @@ async function processBatch() {
                 }
             }
 
-            // 使用與單張一致的畫布渲染機制，確保品質、字型、外框 100% 相同
+            // 1. 改為使用 'image/jpeg' 轉檔，並設品質 0.95，強制剝離 Alpha 透明通道
             const canvas = await capturePromoCardCanvasBatch();
-            const imgData = canvas.toDataURL('image/png').split(',')[1];
+            const imgData = canvas.toDataURL('image/jpeg', 0.95).split(',')[1];
             
-            // 檔名與路徑規劃：/語言/語言+截圖檔名.png
+            // 2. 檔名與路徑規劃：改為 .jpg 結尾
             let cleanImgName = '';
             if (imgPath) {
                 cleanImgName = imgPath.split('/').pop().split('\\').pop().replace(/\.(png|jpg|jpeg|webp)$/i, '');
@@ -1046,9 +1046,9 @@ async function processBatch() {
             let outputFilePath = '';
 
             if (cleanLang) {
-                outputFilePath = `${cleanLang}/${cleanLang}-${cleanImgName}.png`;
+                outputFilePath = `${cleanLang}/${cleanLang}-${cleanImgName}.jpg`;
             } else {
-                outputFilePath = `${cleanImgName}.png`;
+                outputFilePath = `${cleanImgName}.jpg`;
             }
 
             zip.file(outputFilePath, imgData, { base64: true });
