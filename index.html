@@ -579,6 +579,35 @@
         </div>
     </div>
 
+    <!-- ☕ 批量下載完成打賞支持彈窗 (Batch Success Coffee Support Modal) -->
+    <div id="coffee-modal" class="coffee-modal-overlay" style="display: none;">
+        <div class="coffee-modal-card">
+            <div class="coffee-modal-header">
+                <div class="coffee-icon-badge">☕</div>
+                <div class="coffee-header-text">
+                    <h3 class="coffee-modal-title" data-i18n="coffee_modal_title">🎉 批次宣傳圖已全部生成完成！</h3>
+                    <p class="coffee-modal-subtitle" data-i18n="coffee_modal_subtitle">您的 ZIP 檔案已開始自動下載</p>
+                </div>
+                <button type="button" class="coffee-close-btn" onclick="closeCoffeeModal()" aria-label="Close">✕</button>
+            </div>
+            
+            <div class="coffee-modal-body">
+                <div class="coffee-desc-box">
+                    <p data-i18n="coffee_modal_desc">
+                        如果這個工具為您省下了大量修圖與排版的時間，歡迎請作者喝杯咖啡，支持此工具持續維護與更新！☕
+                    </p>
+                </div>
+            </div>
+
+            <div class="coffee-modal-footer">
+                <button type="button" class="coffee-btn-secondary" onclick="closeCoffeeModal()" data-i18n="coffee_modal_btn_close">不用了，謝謝</button>
+                <a href="https://buymeacoffee.com/roadSavior" target="_blank" rel="noopener noreferrer" class="coffee-btn-primary" onclick="closeCoffeeModal()">
+                    <span data-i18n="coffee_modal_btn_support">☕ 請作者喝杯咖啡</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 多國語言字典與核心應用程式 JS -->
     <script src="i18n.js"></script>
     <script src="app.js"></script>

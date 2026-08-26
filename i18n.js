@@ -85,7 +85,12 @@ const i18n = {
         "privacy_dont_show": "我知道了，下次不再提示",
         "privacy_btn_cancel": "取消",
         "privacy_btn_confirm": "✓ 我了解，繼續選擇檔案",
-        "btn_buy_me_coffee": "☕ 請作者喝杯咖啡"
+        "btn_buy_me_coffee": "☕ 請作者喝杯咖啡",
+        "coffee_modal_title": "🎉 批次宣傳圖已全部生成完成！",
+        "coffee_modal_subtitle": "您的 ZIP 檔案已開始自動下載",
+        "coffee_modal_desc": "如果這個工具為您省下了大量修圖與排版的時間，歡迎請作者喝杯咖啡，支持此工具持續維護與更新！☕",
+        "coffee_modal_btn_support": "☕ 請作者喝杯咖啡",
+        "coffee_modal_btn_close": "不用了，謝謝"
     },
     "en": {
         "page_title": "App Store & Google Play Screenshot Maker | Fast Promo Mockup Generator",
@@ -170,6 +175,11 @@ const i18n = {
         "privacy_dont_show": "Got it, do not show this again",
         "privacy_btn_cancel": "Cancel",
         "privacy_btn_confirm": "✓ I Understand, Select Files",
-        "btn_buy_me_coffee": "☕ Buy me a coffee"
+        "btn_buy_me_coffee": "☕ Buy me a coffee",
+        "coffee_modal_title": "🎉 Batch Mockups Generated Successfully!",
+        "coffee_modal_subtitle": "Your ZIP archive download has started automatically",
+        "coffee_modal_desc": "If this tool saved you valuable design & mockup time, consider buying the creator a coffee to support future updates! ☕",
+        "coffee_modal_btn_support": "☕ Buy me a coffee",
+        "coffee_modal_btn_close": "Maybe later"
     }
 };

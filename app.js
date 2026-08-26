@@ -243,6 +243,23 @@ const screenFileName = document.getElementById('screen-file-name');
 const uploadBgInput = document.getElementById('upload-bg');
 const uploadScreenInput = document.getElementById('upload-screen');
 
+// ☕ 批量下載完成打賞彈窗控制器 (Coffee Support Modal Controller)
+function openCoffeeModal() {
+    const modal = document.getElementById('coffee-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCoffeeModal() {
+    const modal = document.getElementById('coffee-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
 // 🔒 100% 本機隱私安全保證彈窗控制器 (Privacy Guard Controller)
 let pendingPrivacyAction = null;
 let isBypassingPrivacyCheck = false;
@@ -1041,6 +1058,11 @@ async function processBatch() {
         a.href = URL.createObjectURL(zipBlob);
         a.download = "batch_promo_cards.zip";
         a.click();
+
+        // 🎉 批次成功生成並下載後，延遲彈出請作者喝杯咖啡支持視窗
+        setTimeout(() => {
+            openCoffeeModal();
+        }, 800);
     } catch (err) {
         console.error("批次產圖失敗:", err);
         alert(t('alert_export_error'));
@@ -1231,9 +1253,23 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 按下鍵盤 Esc 鍵關閉展開的試算表或隱私提示視窗
+    const coffeeModal = document.getElementById('coffee-modal');
+    if (coffeeModal) {
+        coffeeModal.addEventListener('click', (e) => {
+            if (e.target === coffeeModal) {
+                closeCoffeeModal();
+            }
+        });
+    }
+
+    // 按下鍵盤 Esc 鍵關閉展開的試算表、隱私提示視窗或打賞視窗
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            const coffeeModal = document.getElementById('coffee-modal');
+            if (coffeeModal && coffeeModal.style.display !== 'none') {
+                closeCoffeeModal();
+                return;
+            }
             const privacyModal = document.getElementById('privacy-modal');
             if (privacyModal && privacyModal.style.display !== 'none') {
                 closePrivacyModal();
