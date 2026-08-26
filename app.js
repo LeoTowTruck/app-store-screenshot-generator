@@ -341,6 +341,8 @@ promoCard.addEventListener('drop', (e) => {
 // ==========================================
 // 9. 圖片匯出下載 (Single & Batch Export Helper)
 // ==========================================
+
+// 單張截圖：使用目前畫面上既有的元素，保持單張既有邏輯
 async function capturePromoCardCanvas() {
     const scaler = document.getElementById('promo-card-scaler');
     const previewWrapper = document.getElementById('preview-wrapper');
@@ -398,6 +400,66 @@ async function capturePromoCardCanvas() {
             previewWrapper.style.left = origLeft;
             previewWrapper.style.top = origTop;
             previewWrapper.style.zIndex = origZIndex;
+        }
+    }
+}
+
+// 批量專用：在背景建立 1:1 的 Off-screen 隱藏卡片進行截圖，完全不干擾前台畫面與縮放
+async function captureOffscreenPromoCard(title, subtitle, screenImgSrc) {
+    const promoCardEl = document.getElementById('promo-card');
+    if (!promoCardEl) throw new Error("Promo card element not found");
+
+    // 複製現有卡片的所有樣式與架構
+    const clone = promoCardEl.cloneNode(true);
+    clone.id = 'offscreen-promo-card-clone';
+    
+    // 設定到背景看不到的區域，並固定為標準 414x896 尺寸
+    clone.style.position = 'fixed';
+    clone.style.left = '-99999px';
+    clone.style.top = '0';
+    clone.style.zIndex = '-99999';
+    clone.style.transform = 'none';
+    clone.style.transition = 'none';
+    clone.style.width = '414px';
+    clone.style.height = '896px';
+    clone.style.visibility = 'visible';
+    clone.style.display = 'flex';
+
+    // 替換克隆卡片上的文字與截圖 (注意對應 index.html 中的真實 id: display-title, display-subtitle, display-screen, placeholder)
+    const cloneTitle = clone.querySelector('#display-title');
+    const cloneSubtitle = clone.querySelector('#display-subtitle');
+    const cloneScreenImg = clone.querySelector('#display-screen');
+    const clonePlaceholder = clone.querySelector('#placeholder');
+
+    if (cloneTitle && title !== undefined) cloneTitle.innerText = title;
+    if (cloneSubtitle && subtitle !== undefined) cloneSubtitle.innerText = subtitle;
+    if (cloneScreenImg && screenImgSrc) {
+        cloneScreenImg.src = screenImgSrc;
+        cloneScreenImg.style.display = 'block';
+        if (clonePlaceholder) clonePlaceholder.style.display = 'none';
+    }
+
+    document.body.appendChild(clone);
+
+    try {
+        // 強制重算 layout
+        void clone.offsetHeight;
+
+        // 等待 200 毫秒確保瀏覽器與圖片完整渲染
+        await new Promise(r => setTimeout(r, 200));
+
+        const canvas = await html2canvas(clone, {
+            scale: 3, // 414x896 放大 3 倍輸出為標準 1242x2688
+            useCORS: true,
+            backgroundColor: null,
+            logging: false
+        });
+
+        return canvas;
+    } finally {
+        // 截圖完畢後清除背景隱藏元素
+        if (clone && clone.parentNode) {
+            clone.parentNode.removeChild(clone);
         }
     }
 }
@@ -852,6 +914,7 @@ async function processBatch() {
             }
 
             // 搜尋匹配檔案
+            let fileDataUrl = '';
             if (imgPath) {
                 const fileNameOnly = imgPath.split('/').pop().split('\\').pop();
                 let targetFile = imageFilesMap[fileNameOnly] || 
@@ -860,13 +923,23 @@ async function processBatch() {
                                 imageFilesMap[fileNameOnly + '.jpeg'];
 
                 if (targetFile) {
-                    await setScreenImageFromFile(targetFile);
+                    fileDataUrl = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.onerror = () => resolve('');
+                        reader.readAsDataURL(targetFile);
+                    });
+                    if (fileDataUrl) {
+                        displayScreen.src = fileDataUrl;
+                        displayScreen.style.display = 'block';
+                        if (placeholder) placeholder.style.display = 'none';
+                    }
                 }
             }
 
-            await new Promise(r => setTimeout(r, 200));
-
-            const canvas = await capturePromoCardCanvas();
+            // 使用背景 Off-screen 克隆方式產圖，畫面完全不跳動
+            const currentImgSrc = fileDataUrl || displayScreen.src;
+            const canvas = await captureOffscreenPromoCard(title, subtitle, currentImgSrc);
             const imgData = canvas.toDataURL('image/png').split(',')[1];
             
             // 檔名與路徑規劃：/語言/語言+截圖檔名.png
